@@ -40,6 +40,15 @@ const purePull = (baseUrl, endPoint, username, password) => {
     .catch((err) => err);
 };
 
+const purePullNotForJson = (baseUrl, endPoint, username, password) => {
+  return fetch(baseUrl + endPoint, {
+    credentials: "include",
+    headers: {
+      Authorization: !username ? "" : "Basic " + btoa(`${username}:${password}`)
+    }
+  });
+};
+
 const push = (baseUrl, username, password, endPoint, payload, method) => {
   return fetch(baseUrl + endPoint, {
     method: method ? method : "POST",
@@ -58,4 +67,4 @@ const push = (baseUrl, username, password, endPoint, payload, method) => {
     });
 };
 
-export { pull, purePull, push };
+export { pull, purePull, purePullNotForJson, push };

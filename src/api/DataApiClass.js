@@ -3,7 +3,7 @@ import BaseApiClass from "./BaseApiClass";
 import moment from "moment";
 
 export default class DataApiClass extends BaseApiClass {
-  getTrackedEntityInstanceList(orgUnit, program, pageSize, page, filter) {
+  getTrackedEntityInstanceList(orgUnit, program, pageSize, page, filter, order) {
     return pull(
       this.baseUrl,
       this.username,
@@ -14,9 +14,11 @@ export default class DataApiClass extends BaseApiClass {
         pageSize: pageSize,
         totalPages: true,
         page: page,
-        filter: filter
+        filter: filter,
+        order: order
       },
-      [`ou=${orgUnit}`, `ouMode=SELECTED`, `order=created:desc`, `program=${program}`]
+      [`ou=${orgUnit}`, `ouMode=SELECTED`, `program=${program}`]
+      // [`ou=${orgUnit}`, `ouMode=SELECTED`, `order=created:desc`, `program=${program}`]
     );
   }
 

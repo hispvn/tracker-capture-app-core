@@ -1,4 +1,4 @@
-import { pull, push, purePull } from "./Fetch";
+import { pull, push, purePull, purePullNotForJson } from "./Fetch";
 
 export default class BaseApiClass {
   constructor(baseUrl, username, password) {
@@ -13,6 +13,10 @@ export default class BaseApiClass {
 
   pull(endPoint) {
     return purePull(this.baseUrl, endPoint, this.username, this.password);
+  }
+
+  pullNotForJson(endPoint) {
+    return purePullNotForJson(this.baseUrl, endPoint, this.username, this.password);
   }
 
   push(endPoint, payload, method) {
