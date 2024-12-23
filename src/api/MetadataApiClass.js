@@ -180,7 +180,7 @@ export default class MetadataApiClass extends BaseApiClass {
         paging: false
       },
       [
-        "fields=id,displayName,userGroupAccesses,trackedEntityType,organisationUnits[id,displayName,code,path,attributeValues],programRuleVariables[name,programRuleVariableSourceType,dataElement,trackedEntityAttribute],programTrackedEntityAttributes[mandatory,displayInList,searchable,trackedEntityAttribute[id,displayName,displayFormName,displayShortName,valueType,optionSet[id],unique]],programStages[id,displayName,programStageDataElements[displayInReports,sortOrder,compulsory,dataElement[id,displayName,displayFormName,displayShortName,description,valueType,optionSet[id]]"
+        "fields=id,displayName,sharing,userGroupAccesses,trackedEntityType,organisationUnits[id,displayName,code,path,attributeValues],programRuleVariables[name,programRuleVariableSourceType,dataElement,trackedEntityAttribute],programTrackedEntityAttributes[mandatory,displayInList,searchable,trackedEntityAttribute[id,displayName,displayFormName,displayShortName,valueType,optionSet[id],unique]],programStages[id,displayName,programStageDataElements[displayInReports,sortOrder,compulsory,dataElement[id,displayName,displayFormName,displayShortName,description,valueType,optionSet[id]]"
       ]
     );
     const programRules = await pull(
@@ -272,6 +272,7 @@ export default class MetadataApiClass extends BaseApiClass {
     programMetadata.programRules = programRules.programRules;
     programMetadata.programRuleVariables = p.programRuleVariables;
     programMetadata.userGroupAccesses = p.userGroupAccesses;
+    programMetadata.sharing = p.sharing;
     return programMetadata;
   }
 

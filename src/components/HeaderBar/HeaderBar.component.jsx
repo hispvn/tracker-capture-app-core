@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { HeaderBar } from "@dhis2/ui-widgets";
+import { HeaderBar } from "@dhis2/ui";
 import "./HeaderBar.styles.css";
 import propTypes from "./HeaderBar.types.js";
 import { CustomDataProvider, Provider } from "@dhis2/app-runtime";
@@ -28,7 +28,7 @@ const Dhis2HeaderBar = ({ title }) => {
     // });
   }, []);
   return (
-    <Provider config={{ apiVersion: "33", baseUrl: "../../.." }}>
+    <Provider config={{ apiVersion: "", baseUrl: process.env.REACT_APP_BASE_URL }}>
       {/* <CustomDataProvider data={createCustomData(data)}> */}
       <HeaderBar appName={title} />
       {/* </CustomDataProvider> */}
