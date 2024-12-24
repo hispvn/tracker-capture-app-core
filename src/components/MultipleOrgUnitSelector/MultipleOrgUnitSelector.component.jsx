@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CustomDataProvider } from "@dhis2/app-runtime";
+import { CustomDataProvider, Provider } from "@dhis2/app-runtime";
 import { OrganisationUnitTree } from "@dhis2/ui";
 import LoadingMask from "../LoadingMask/LoadingMask.component.jsx";
 import useApi from "../../hooks/useApi";
@@ -24,7 +24,8 @@ const MultipleOrgUnitSelector = ({
   }, []);
 
   return orgUnitData ? (
-    <CustomDataProvider data={orgUnitData.tree}>
+    // <CustomDataProvider data={orgUnitData.tree}>
+    <Provider config={{ apiVersion: "", baseUrl: process.env.REACT_APP_BASE_URL }}>
       <OrganisationUnitTree
         initiallyExpanded={
           selectedOrgUnits ? selectedOrgUnits : orgUnitData.roots
@@ -35,7 +36,8 @@ const MultipleOrgUnitSelector = ({
           handleSelectOrgUnits(selected);
         }}
       />
-    </CustomDataProvider>
+    {/* </CustomDataProvider> */}
+    </Provider>
   ) : (
     <LoadingMask />
   );
