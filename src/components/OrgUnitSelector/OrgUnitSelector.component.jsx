@@ -15,7 +15,7 @@ const OrgUnitSelector = ({ selectedOrgUnit, handleSelectOrgUnit, filter }) => {
     });
   }, []);
 
-  const foundSelectedOrgUnit = orgUnitData ? orgUnitData.tree[`organisationUnits/${selectedOrgUnit}`] : "";
+  const foundSelectedOrgUnit = orgUnitData ? orgUnitData.tree[`organisationUnits/${selectedOrgUnit ? selectedOrgUnit.id : selectedOrgUnit}`] : "";
   let transformedSelectedOrgUnit = null;
   if (foundSelectedOrgUnit) {
     if (orgUnitData.roots.includes(selectedOrgUnit)) {
@@ -33,6 +33,7 @@ const OrgUnitSelector = ({ selectedOrgUnit, handleSelectOrgUnit, filter }) => {
         onChange={(selected) => {
           handleSelectOrgUnit(selected);
         }}
+        filter={filter}
       />
     </Provider>
     // <CustomDataProvider data={orgUnitData.tree}>

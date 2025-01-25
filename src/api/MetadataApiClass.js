@@ -276,6 +276,45 @@ export default class MetadataApiClass extends BaseApiClass {
     return programMetadata;
   }
 
+  async getTrackedEntityType(tet) {
+    const p = await pull(
+      this.baseUrl,
+      this.username,
+      this.password,
+      `/api/trackedEntityTypes/${tet}`,
+      {
+        paging: false
+      },
+      [
+        "fields=:owner,!created,!lastUpdated,!lastUpdatedBy,!user,!translations,trackedEntityTypeAttributes[mandatory,displayInList,searchable,trackedEntityAttribute[id,displayName,displayFormName,displayShortName,valueType,optionSet[id,options[id,displayName,code,sortOrder]],unique]]"
+      ]
+    );
+    
+    const TETMetadata = {};
+    TETMetadata.id = p.id;
+    TETMetadata.code = p.code;
+    TETMetadata.displayName = p.name;
+    TETMetadata.description = p.description;
+    TETMetadata.trackedEntityAttributes = p.trackedEntityTypeAttributes.map((ptea) => {
+      const tea = {
+        compulsory: ptea.mandatory,
+        id: ptea.trackedEntityAttribute.id,
+        displayName: ptea.trackedEntityAttribute.displayName,
+        displayFormName: ptea.trackedEntityAttribute.displayFormName
+          ? ptea.trackedEntityAttribute.displayFormName
+          : ptea.trackedEntityAttribute.displayShortName,
+        valueType: ptea.trackedEntityAttribute.valueType,
+        valueSet: ptea.trackedEntityAttribute.optionSet ? ptea.trackedEntityAttribute.optionSet.options.map(({code,displayName}) => ({value: code, label: displayName})) : null,
+        optionSet: ptea.trackedEntityAttribute.optionSet ? ptea.trackedEntityAttribute.optionSet.id : null,
+        displayInList: ptea.displayInList,
+        searchable: ptea.searchable,
+        unique: ptea.trackedEntityAttribute.unique
+      };
+      return tea;
+    });
+    return TETMetadata;
+  }
+
   getOrgUnitGroups() {
     return pull(
       this.baseUrl,

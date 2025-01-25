@@ -105,7 +105,7 @@ export default class DataApiClass extends BaseApiClass {
   searchTei(program, attributes, pageSize, page) {
     let filters = "";
     attributes.forEach((attr) => {
-      filters += `&filter=${attr.attribute}:LIKE:${attr.value}`;
+      filters += `&filter=${attr.attribute}:EQ:${attr.value}`;
     });
     return pull(
       this.baseUrl,
@@ -117,9 +117,32 @@ export default class DataApiClass extends BaseApiClass {
         pageSize: pageSize,
         totalPages: true,
         page: page,
-        filter: filters
+        filter: filters,
+        order: "order=created:desc"
       },
       [`ouMode=ACCESSIBLE`, `program=${program}`, `fields=*`]
+    );
+  }
+
+  searchTeiByTet(tet, attributes, pageSize, page) {
+    let filters = "";
+    attributes.forEach((attr) => {
+      filters += `&filter=${attr.attribute}:EQ:${attr.value}`;
+    });
+    return pull(
+      this.baseUrl,
+      this.username,
+      this.password,
+      `/api/trackedEntityInstances`,
+      {
+        paging: true,
+        pageSize: pageSize,
+        totalPages: true,
+        page: page,
+        filter: filters,
+        order: "order=created:desc"
+      },
+      [`ouMode=ACCESSIBLE`, `trackedEntityType=${tet}`, `fields=*`]
     );
   }
 
