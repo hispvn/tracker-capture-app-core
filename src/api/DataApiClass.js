@@ -3,7 +3,14 @@ import BaseApiClass from "./BaseApiClass";
 import moment from "moment";
 
 export default class DataApiClass extends BaseApiClass {
-  getTrackedEntityInstanceList(orgUnit, program, pageSize, page, filter, order) {
+  getTrackedEntityInstanceList(
+    orgUnit,
+    program,
+    pageSize,
+    page,
+    filter,
+    order
+  ) {
     return pull(
       this.baseUrl,
       this.username,
@@ -15,14 +22,22 @@ export default class DataApiClass extends BaseApiClass {
         totalPages: true,
         page: page,
         filter: filter,
-        order: order
+        order: order,
       },
       [`ou=${orgUnit}`, `ouMode=SELECTED`, `program=${program}`]
       // [`ou=${orgUnit}`, `ouMode=SELECTED`, `order=created:desc`, `program=${program}`]
     );
   }
 
-  getTrackedEntityInstanceListByQuery(orgUnit, program, pageSize, page, filter, order, programStatus) {
+  getTrackedEntityInstanceListByQuery(
+    orgUnit,
+    program,
+    pageSize,
+    page,
+    filter,
+    order,
+    programStatus
+  ) {
     return pull(
       this.baseUrl,
       this.username,
@@ -34,9 +49,14 @@ export default class DataApiClass extends BaseApiClass {
         totalPages: true,
         page: page,
         filter: filter,
-        order: order
+        order: order,
       },
-      [`ou=${orgUnit}`, `ouMode=SELECTED`, `program=${program}`, programStatus ? `programStatus=${programStatus}` : ""]
+      [
+        `ou=${orgUnit}`,
+        `ouMode=SELECTED`,
+        `program=${program}`,
+        programStatus ? `programStatus=${programStatus}` : "",
+      ]
     );
   }
 
@@ -47,13 +67,13 @@ export default class DataApiClass extends BaseApiClass {
       this.password,
       `/api/events`,
       {
-        paging: false
+        paging: false,
       },
       [
         `fields=:all`,
         `program=${program}`,
         `trackedEntityInstance=${trackedEntityInstance}`,
-        `startDate=${startDate}&endDate=${endDate}`
+        `startDate=${startDate}&endDate=${endDate}`,
       ]
     );
   }
@@ -65,7 +85,7 @@ export default class DataApiClass extends BaseApiClass {
       this.password,
       `/api/trackedEntityInstances/query`,
       {
-        paging: false
+        paging: false,
       },
       [`ou=${orgUnit}`, `ouMode=SELECTED`, `program=${program}`]
     );
@@ -78,7 +98,7 @@ export default class DataApiClass extends BaseApiClass {
       this.password,
       `/api/trackedEntityInstanceFilters`,
       {
-        paging: false
+        paging: false,
       },
       [`fields=:all`, `program=${program}`]
     );
@@ -96,7 +116,7 @@ export default class DataApiClass extends BaseApiClass {
       `/api/trackedEntityInstances`,
       {
         paging: false,
-        filter: filters
+        filter: filters,
       },
       [`ou=${orgUnit}`, `ouMode=ACCESSIBLE`, `program=${program}`, `fields=*`]
     );
@@ -118,7 +138,7 @@ export default class DataApiClass extends BaseApiClass {
         totalPages: true,
         page: page,
         filter: filters,
-        order: "order=created:desc"
+        order: "order=created:desc",
       },
       [`ouMode=ACCESSIBLE`, `program=${program}`, `fields=*`]
     );
@@ -140,15 +160,30 @@ export default class DataApiClass extends BaseApiClass {
         totalPages: true,
         page: page,
         filter: filters,
-        order: "order=created:desc"
+        order: "order=created:desc",
       },
       [`ouMode=ACCESSIBLE`, `trackedEntityType=${tet}`, `fields=*`]
     );
   }
 
   search(ouId, ouMode, queryUrl, program, attribute, pager, paging) {
-    var url = this.getSearchUrl(ouId, ouMode, queryUrl, program, attribute, pager, paging);
-    return pull(this.baseUrl, this.username, this.password, `/api/trackedEntityInstances/query`, {}, [url]);
+    var url = this.getSearchUrl(
+      ouId,
+      ouMode,
+      queryUrl,
+      program,
+      attribute,
+      pager,
+      paging
+    );
+    return pull(
+      this.baseUrl,
+      this.username,
+      this.password,
+      `/api/trackedEntityInstances/query`,
+      {},
+      [url]
+    );
   }
 
   getSearchUrl(ouId, ouMode, queryUrl, program, attribute, pager, paging) {
@@ -188,11 +223,16 @@ export default class DataApiClass extends BaseApiClass {
   getEventUrl(eventFilter) {
     var eventUrl = "";
     if (eventFilter) {
-      if (eventFilter.eventStatus) eventUrl = "eventStatus=" + eventFilter.eventStatus;
+      if (eventFilter.eventStatus)
+        eventUrl = "eventStatus=" + eventFilter.eventStatus;
       if (eventFilter.eventCreatedPeriod) {
         if (eventUrl) eventUrl += "&";
-        eventUrl += "eventStartDate=" + this.getPeriodDate(eventFilter.eventCreatedPeriod.periodFrom);
-        eventUrl += "&eventEndDate=" + this.getPeriodDate(eventFilter.eventCreatedPeriod.periodTo);
+        eventUrl +=
+          "eventStartDate=" +
+          this.getPeriodDate(eventFilter.eventCreatedPeriod.periodFrom);
+        eventUrl +=
+          "&eventEndDate=" +
+          this.getPeriodDate(eventFilter.eventCreatedPeriod.periodTo);
       }
       if (eventFilter.programStage) {
         if (eventUrl) eventUrl += "&";
@@ -243,14 +283,20 @@ export default class DataApiClass extends BaseApiClass {
   //   return tei;
   // }
 
-  getWorkingListDataWithMultipleEventFilters(workingList, ou, program, pager, sortColumn) {
+  getWorkingListDataWithMultipleEventFilters(
+    workingList,
+    ou,
+    program,
+    pager,
+    sortColumn
+  ) {
     return new Promise((resolve) => {
       var promises = [];
       workingList.eventFilters.forEach((eventFilter) => {
         var eventUrl = this.getEventUrl(eventFilter);
         var tempPager = {
           pageSize: 1000,
-          page: 1
+          page: 1,
         };
         promises.push(
           this.search(
@@ -272,8 +318,11 @@ export default class DataApiClass extends BaseApiClass {
 
         response.forEach((responseData) => {
           data.headers =
-            data.headers && data.headers.length > responseData.headers.length ? data.headers : responseData.headers;
-          data.width = data.width > responseData.width ? data.width : responseData.width;
+            data.headers && data.headers.length > responseData.headers.length
+              ? data.headers
+              : responseData.headers;
+          data.width =
+            data.width > responseData.width ? data.width : responseData.width;
           allRows = allRows.concat(responseData.rows);
         });
 
@@ -308,7 +357,13 @@ export default class DataApiClass extends BaseApiClass {
   }
 
   pushTrackedEntityInstance(tei, program) {
-    return push(this.baseUrl, this.username, this.password, `/api/trackedEntityInstances?program=${program}`, tei);
+    return push(
+      this.baseUrl,
+      this.username,
+      this.password,
+      `/api/trackedEntityInstances?program=${program}`,
+      tei
+    );
   }
 
   async putTrackedEntityInstance(tei, program) {
@@ -323,21 +378,40 @@ export default class DataApiClass extends BaseApiClass {
   }
 
   async postTrackedEntityInstance(tei, program) {
-    const result = await push(this.baseUrl, this.username, this.password, `/api/trackedEntityInstances`, tei, "POST");
+    const result = await push(
+      this.baseUrl,
+      this.username,
+      this.password,
+      `/api/trackedEntityInstances`,
+      tei,
+      "POST"
+    );
   }
 
   pushEnrollment(enrollment, program) {
-    return push(this.baseUrl, this.username, this.password, `/api/enrollments?program=${program}`, enrollment);
+    return push(
+      this.baseUrl,
+      this.username,
+      this.password,
+      `/api/enrollments?program=${program}`,
+      enrollment
+    );
   }
 
   pushEvents(events) {
-    return push(this.baseUrl, this.username, this.password, `/api/events/`, events);
+    return push(
+      this.baseUrl,
+      this.username,
+      this.password,
+      `/api/events/`,
+      events
+    );
   }
 
   /**
-   * 
-   * @param {*} eventId 
-   * @returns 
+   *
+   * @param {*} eventId
+   * @returns
    */
   pullEventById(eventId) {
     return pull(
@@ -345,12 +419,19 @@ export default class DataApiClass extends BaseApiClass {
       this.username,
       this.password,
       `/api/events${eventId}`,
-      {}, []
+      {},
+      []
     );
   }
 
   async deleteEvent(event) {
-    const result = await push(this.baseUrl, this.username, this.password, `/api/events?strategy=DELETE`, event);
+    const result = await push(
+      this.baseUrl,
+      this.username,
+      this.password,
+      `/api/events?strategy=DELETE`,
+      event
+    );
     return result.status == "OK";
   }
 
