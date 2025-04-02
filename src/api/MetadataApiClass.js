@@ -255,6 +255,7 @@ export default class MetadataApiClass extends BaseApiClass {
             optionSet: psde.dataElement.optionSet ? psde.dataElement.optionSet.id : null
           };
           if (psde.dataElement.optionSet) {
+            console.log(psde.dataElement);
             dataElement.valueSet = optionSets.optionSets
               .find((os) => os.id === psde.dataElement.optionSet.id)
               .options.map((o) => {
