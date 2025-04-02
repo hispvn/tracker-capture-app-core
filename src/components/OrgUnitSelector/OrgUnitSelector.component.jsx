@@ -22,7 +22,15 @@ const OrgUnitSelector = ({ selectedOrgUnit, handleSelectOrgUnit, filter }) => {
         }
       });
       setOrgUnitData(json);
-      setKey(filter.join("") + new Date().getTime());
+      if (filter.length > 0) {
+        const newKey = filter.join("") + new Date().getTime();
+        if (key !== newKey) {
+          setKey(newKey);
+        }
+      } else if (key !== "default") {
+        setKey("default");
+      }
+      //setKey(filter.join("") + new Date().getTime());
     });
   }, [filter]);
 
@@ -104,7 +112,7 @@ const OrgUnitSelector = ({ selectedOrgUnit, handleSelectOrgUnit, filter }) => {
     <Provider
       config={{ apiVersion: "", baseUrl: process.env.REACT_APP_BASE_URL }}
     >
-      {returnOrgUnitTree()}
+      {key ? returnOrgUnitTree() : ""}
     </Provider>
   ) : (
     <LoadingMask />
