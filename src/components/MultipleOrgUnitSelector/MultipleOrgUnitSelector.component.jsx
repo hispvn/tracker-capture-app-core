@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CustomDataProvider, Provider } from "@dhis2/app-runtime";
+import { CustomDataProvider, Provider, SwitchableProvider } from "@dhis2/app-runtime";
 import { OrganisationUnitTree } from "@dhis2/ui";
 import LoadingMask from "../LoadingMask/LoadingMask.component.jsx";
 import useApi from "../../hooks/useApi";
@@ -36,8 +36,8 @@ const MultipleOrgUnitSelector = ({
           handleSelectOrgUnits(selected);
         }}
       />
-    {/* </CustomDataProvider> */}
     </Provider>
+    // </CustomDataProvider>
   ) : (
     <LoadingMask />
   );
