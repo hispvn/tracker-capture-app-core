@@ -112,7 +112,7 @@ const OrgUnitSelector = ({ selectedOrgUnit, handleSelectOrgUnit, filter }) => {
     <Provider
       config={{ apiVersion: "", baseUrl: process.env.REACT_APP_BASE_URL }}
     >
-      {key ? returnOrgUnitTree() : ""}
+      {key ? returnOrgUnitTree() : null}
     </Provider>
   ) : (
     <LoadingMask />
